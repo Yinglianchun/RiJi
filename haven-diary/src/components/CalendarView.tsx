@@ -47,9 +47,9 @@ export default function CalendarView({ diaries, onDateClick }: CalendarViewProps
       <button
         key={i}
         onClick={() => diaryExists && onDateClick(dateStr)}
-        className={`aspect-square min-h-10 border border-gray-50 flex flex-col items-center justify-center relative transition-all md:h-20 ${
-          diaryExists ? 'hover:bg-accent/10 cursor-pointer' : 'cursor-default text-gray-300'
-        } ${isToday ? 'bg-gray-50' : ''}`}
+        className={`aspect-square min-h-10 border border-border-subtle flex flex-col items-center justify-center relative transition-all md:h-20 ${
+          diaryExists ? 'hover:bg-accent/10 cursor-pointer' : 'cursor-default text-text-secondary/45'
+        } ${isToday ? 'bg-sidebar-hover' : ''}`}
       >
         <span className={`text-sm font-medium ${isToday ? 'text-accent' : ''}`}>{i}</span>
         {diaryExists && (
@@ -60,22 +60,22 @@ export default function CalendarView({ diaries, onDateClick }: CalendarViewProps
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E5E5E5] overflow-hidden shadow-sm">
-      <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between">
+    <div className="bg-bg-sidebar rounded-2xl border border-border-subtle overflow-hidden shadow-sm">
+      <div className="p-4 sm:p-6 border-b border-border-subtle flex items-center justify-between">
         <h2 className="text-base sm:text-lg font-semibold">{monthName}</h2>
         <div className="flex gap-2">
-          <button onClick={prevMonth} className="grid h-11 w-11 place-items-center hover:bg-gray-100 rounded-full transition-colors" aria-label="上个月">
-            <ChevronLeft className="w-5 h-5 text-gray-600" />
+          <button onClick={prevMonth} className="grid h-11 w-11 place-items-center hover:bg-sidebar-hover rounded-full transition-colors" aria-label="上个月">
+            <ChevronLeft className="w-5 h-5 text-text-secondary" />
           </button>
-          <button onClick={nextMonth} className="grid h-11 w-11 place-items-center hover:bg-gray-100 rounded-full transition-colors" aria-label="下个月">
-            <ChevronRight className="w-5 h-5 text-gray-600" />
+          <button onClick={nextMonth} className="grid h-11 w-11 place-items-center hover:bg-sidebar-hover rounded-full transition-colors" aria-label="下个月">
+            <ChevronRight className="w-5 h-5 text-text-secondary" />
           </button>
         </div>
       </div>
       
-      <div className="grid grid-cols-7 text-center border-b border-gray-50">
+      <div className="grid grid-cols-7 text-center border-b border-border-subtle">
         {['日', '一', '二', '三', '四', '五', '六'].map(day => (
-          <div key={day} className="py-3 text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+          <div key={day} className="py-3 text-[10px] font-bold text-text-secondary uppercase tracking-widest">
             {day}
           </div>
         ))}

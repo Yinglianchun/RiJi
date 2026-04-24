@@ -425,7 +425,7 @@ const DiaryCard: React.FC<{ diary: Diary, onClick: () => void }> = ({ diary, onC
     <motion.div
       whileHover={{ y: -2 }}
       onClick={onClick}
-      className={`group bg-white border-b pb-10 cursor-pointer transition-all duration-300 ${
+      className={`group bg-bg-main border-b pb-10 cursor-pointer transition-all duration-300 ${
         isAI ? 'border-border-subtle' : 'border-l-4 border-l-blue-400 pl-4'
       }`}
     >
@@ -544,9 +544,9 @@ const DiaryDetail: React.FC<{
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.98, opacity: 0, y: 10 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white w-full max-w-4xl max-h-[92vh] rounded-t-3xl shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh] sm:rounded-2xl"
+        className="bg-bg-main w-full max-w-4xl max-h-[92vh] rounded-t-3xl shadow-2xl overflow-hidden flex flex-col sm:max-h-[90vh] sm:rounded-2xl"
       >
-        <div className="p-4 sm:p-8 border-b border-border-subtle flex justify-between items-start gap-3 bg-white sticky top-0 z-10">
+        <div className="p-4 sm:p-8 border-b border-border-subtle flex justify-between items-start gap-3 bg-bg-main sticky top-0 z-10">
           <div className="min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <p className="text-sm text-text-secondary">{diary.date}</p>
@@ -600,7 +600,7 @@ const DiaryDetail: React.FC<{
                     type="text"
                     value={editTitle}
                     onChange={(e) => setEditTitle(e.target.value)}
-                    className="w-full p-3 border border-border-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
+                    className="w-full bg-bg-sidebar p-3 border border-border-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-accent"
                     placeholder="日记标题..."
                   />
                 </div>
@@ -609,7 +609,7 @@ const DiaryDetail: React.FC<{
                   <textarea
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
-                    className="w-full min-h-[260px] sm:min-h-[300px] p-4 border border-border-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-base sm:text-[18px] leading-[1.8]"
+                    className="w-full min-h-[260px] sm:min-h-[300px] bg-bg-sidebar p-4 border border-border-subtle rounded-lg focus:outline-none focus:ring-2 focus:ring-accent text-base sm:text-[18px] leading-[1.8]"
                     placeholder="编辑日记内容..."
                   />
                 </div>
@@ -626,7 +626,7 @@ const DiaryDetail: React.FC<{
                       setEditTitle(diary.title || '');
                       setEditContent(diary.content);
                     }}
-                    className="min-h-11 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                    className="min-h-11 px-6 py-2 bg-sidebar-hover text-text-primary rounded-lg hover:opacity-90"
                   >
                     取消
                   </button>
@@ -676,7 +676,7 @@ const DiaryDetail: React.FC<{
               <button 
                 onClick={handleSubmit}
                 disabled={!comment.trim()}
-                className="absolute right-4 bottom-4 grid h-11 w-11 place-items-center bg-text-primary text-white rounded-lg hover:opacity-90 transition-all disabled:opacity-30"
+                className="absolute right-4 bottom-4 grid h-11 w-11 place-items-center bg-text-primary text-bg-main rounded-lg hover:opacity-90 transition-all disabled:opacity-30"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -694,9 +694,9 @@ const Toast: React.FC<{
   onClose: () => void
 }> = ({ message, tone, onClose }) => {
   const toneClass = {
-    success: 'border-emerald-200 bg-white text-text-primary',
-    error: 'border-red-200 bg-white text-text-primary',
-    info: 'border-border-subtle bg-white text-text-primary',
+    success: 'border-emerald-200 bg-bg-sidebar text-text-primary',
+    error: 'border-red-200 bg-bg-sidebar text-text-primary',
+    info: 'border-border-subtle bg-bg-sidebar text-text-primary',
   }[tone];
 
   return (
@@ -755,7 +755,7 @@ const ConfirmDialog: React.FC<{
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.98, y: 10 }}
         onClick={(event) => event.stopPropagation()}
-        className="w-full max-w-md rounded-3xl border border-border-subtle bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.16)]"
+        className="w-full max-w-md rounded-3xl border border-border-subtle bg-bg-sidebar p-6 shadow-[0_24px_80px_rgba(15,23,42,0.16)]"
       >
         <div className="mb-6 space-y-2">
           <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-text-secondary">Just a second</p>
@@ -772,9 +772,9 @@ const ConfirmDialog: React.FC<{
           </button>
           <button
             onClick={() => void onConfirm()}
-            className={`rounded-xl px-4 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 ${
+            className={`rounded-xl px-4 py-2.5 text-sm font-medium transition-opacity hover:opacity-90 ${
               confirmVariant === 'danger' ? 'bg-red-500' : 'bg-text-primary'
-            }`}
+            } ${confirmVariant === 'danger' ? 'text-white' : 'text-bg-main'}`}
           >
             {confirmLabel}
           </button>
@@ -822,7 +822,7 @@ const WriteDiary: React.FC<{
         <h2 className="text-4xl sm:text-5xl font-bold diary-title tracking-tight">撰写新篇章</h2>
       </div>
 
-      <div className="bg-white rounded-2xl border border-border-subtle p-4 sm:p-8 shadow-sm">
+      <div className="bg-bg-sidebar rounded-2xl border border-border-subtle p-4 sm:p-8 shadow-sm">
         <div className="mb-6">
           <label className="block text-sm font-medium text-text-secondary mb-3">日期</label>
           <input
@@ -840,7 +840,7 @@ const WriteDiary: React.FC<{
               onClick={() => setAuthor('user')}
               className={`flex-1 min-h-11 py-3 rounded-xl border transition-all text-sm font-medium ${
                 author === 'user'
-                  ? 'bg-gray-200 border-gray-400 text-gray-700'
+                  ? 'bg-sidebar-hover border-accent text-text-primary'
                   : 'border-border-subtle text-text-secondary hover:bg-sidebar-hover'
               }`}
             >
@@ -850,7 +850,7 @@ const WriteDiary: React.FC<{
               onClick={() => setAuthor('ai')}
               className={`flex-1 min-h-11 py-3 rounded-xl border transition-all text-sm font-medium ${
                 author === 'ai'
-                  ? 'bg-gray-200 border-gray-400 text-gray-700'
+                  ? 'bg-sidebar-hover border-accent text-text-primary'
                   : 'border-border-subtle text-text-secondary hover:bg-sidebar-hover'
               }`}
             >
@@ -925,7 +925,7 @@ const WriteDiary: React.FC<{
           </button>
           <button
             onClick={handleSubmit}
-            className="min-h-11 px-6 py-2.5 bg-text-primary text-white rounded-lg hover:opacity-90 transition-all text-sm flex items-center justify-center gap-2"
+            className="min-h-11 px-6 py-2.5 bg-text-primary text-bg-main rounded-lg hover:opacity-90 transition-all text-sm flex items-center justify-center gap-2"
           >
             <Save className="w-4 h-4" />
             保存日记
@@ -987,7 +987,7 @@ const MemoryLane: React.FC<{ diaries: Diary[], onDiaryClick: (diary: Diary) => v
                   >
                     <div className="absolute -left-[21px] top-4 h-3 w-3 rounded-full bg-accent ring-4 ring-bg-main transition-transform group-hover:scale-125 sm:-left-[33px]" />
 
-                    <div className="bg-white rounded-xl border border-border-subtle p-4 hover:border-accent/30 hover:shadow-sm transition-all sm:p-6">
+                    <div className="bg-bg-sidebar rounded-xl border border-border-subtle p-4 hover:border-accent/30 hover:shadow-sm transition-all sm:p-6">
                       <div className="flex flex-col gap-3 mb-3 sm:flex-row sm:items-start sm:justify-between">
                         <div className="min-w-0">
                           <span className="text-sm text-text-secondary font-medium">{diary.date}</span>

@@ -12,6 +12,7 @@
   --color-text-secondary: var(--text-secondary);
   --color-accent: var(--accent);
   --color-border-main: var(--border-main);
+  --color-border-subtle: var(--border-subtle);
   --color-sidebar-hover: var(--sidebar-hover);
 }
 
@@ -22,6 +23,7 @@
   --text-secondary: #666666;
   --accent: #7c7cf0;
   --border-main: #e5e5e5;
+  --border-subtle: #e9e9e9;
   --sidebar-hover: #ececec;
 }
 
@@ -32,6 +34,7 @@
   --text-secondary: #a0a0a0;
   --accent: #9d9df5;
   --border-main: #262626;
+  --border-subtle: #2a2a2a;
   --sidebar-hover: #1f1f1f;
 }
 
