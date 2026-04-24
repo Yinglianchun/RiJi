@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import "tailwindcss";
+@import "react-quill-new/dist/quill.snow.css";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  
+  --color-bg-main: var(--bg-main);
+  --color-bg-sidebar: var(--bg-sidebar);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-accent: var(--accent);
+  --color-border-main: var(--border-main);
+  --color-sidebar-hover: var(--sidebar-hover);
+}
+
+:root {
+  --bg-main: #ffffff;
+  --bg-sidebar: #f9f9f9;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --accent: #7c7cf0;
+  --border-main: #e5e5e5;
+  --sidebar-hover: #ececec;
+}
+
+.dark {
+  --bg-main: #0a0a0a;
+  --bg-sidebar: #141414;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a0a0a0;
+  --accent: #9d9df5;
+  --border-main: #262626;
+  --sidebar-hover: #1f1f1f;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Custom Editorial Styles */
+.diary-title {
+  font-family: var(--font-serif);
+}
+
+.quote-box {
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+/* Quill Editor Overrides for Dark Mode */
+.dark .ql-snow .ql-stroke {
+  stroke: var(--text-primary);
+}
+.dark .ql-snow .ql-fill {
+  fill: var(--text-primary);
+}
+.dark .ql-snow .ql-picker {
+  color: var(--text-primary);
+}
+.dark .ql-editor.ql-blank::before {
+  color: var(--text-secondary);
+}
+.dark .ql-toolbar.ql-snow {
+  border-color: var(--border-main);
+  background-color: var(--bg-sidebar);
+}
+.dark .ql-container.ql-snow {
+  border-color: var(--border-main);
+}
+.dark .ql-snow .ql-picker-options {
+  background-color: var(--bg-sidebar);
+  border-color: var(--border-main);
+}

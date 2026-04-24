@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+
+.venv/
+venv/
+.tmp_mcp_test_venv/
+
+diary.db
+*.sqlite
+*.sqlite3
+
+.env
+.env.*
+!.env.example
