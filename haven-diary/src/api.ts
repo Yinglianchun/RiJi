@@ -5,8 +5,8 @@
 
 import { Diary, Comment } from './types';
 
-// API 基础 URL - 可以通过环境变量配置
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// API 基础 URL - 默认走同源，避免 HTTPS 页面请求 HTTP IP 被浏览器拦截
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? '';
 
 /**
  * API 响应类型
