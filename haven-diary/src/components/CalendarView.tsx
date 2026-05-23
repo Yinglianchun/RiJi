@@ -14,6 +14,7 @@ interface CalendarViewProps {
 
 export default function CalendarView({ diaries, onDateClick }: CalendarViewProps) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
   const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
@@ -38,27 +39,42 @@ export default function CalendarView({ diaries, onDateClick }: CalendarViewProps
 
   const days = [];
   for (let i = 0; i < firstDayOfMonth; i++) {
-    days.push(<div key={`empty-${i}`} aria-hidden="true" className="min-h-11 rounded-md bg-bg-sidebar/45 sm:min-h-16 md:min-h-20" />);
+    days.push(<div key={`empty-${i}`} aria-hidden="true" className="min-h-11 sm:min-h-16 md:min-h-20" />);
   }
 
   for (let i = 1; i <= daysInMonth; i++) {
     const isToday = new Date().toDateString() === new Date(currentDate.getFullYear(), currentDate.getMonth(), i).toDateString();
     const diaryExists = hasDiary(i);
     const dateStr = `${monthPrefix}-${String(i).padStart(2, '0')}`;
+    const isSelected = selectedDate === dateStr;
 
     days.push(
       <button
         key={i}
-        onClick={() => diaryExists && onDateClick(dateStr)}
-        className={`group relative flex min-h-11 w-full flex-col items-start justify-between rounded-md border px-2 py-2 text-left transition-all duration-200 ease-out sm:min-h-16 sm:px-3 md:min-h-20 md:p-3 ${
+        onClick={() => {
+          if (!diaryExists) return;
+          setSelectedDate(dateStr);
+          onDateClick(dateStr);
+        }}
+        className={`group relative flex min-h-11 w-full items-center justify-center rounded-md text-center transition-colors duration-200 ease-out sm:min-h-16 md:min-h-20 ${
           diaryExists
-            ? 'cursor-pointer border-border-subtle bg-bg-main shadow-[0_10px_24px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:border-accent/35 hover:bg-accent/5 hover:shadow-[0_16px_30px_rgba(15,23,42,0.08)]'
-            : 'cursor-default border-transparent bg-bg-sidebar/45 text-text-secondary/45'
-        } ${isToday ? 'border-accent/30 bg-accent/10 text-accent shadow-[inset_0_0_0_1px_rgba(124,124,240,0.16)]' : ''}`}
+            ? 'cursor-pointer text-text-primary hover:text-accent'
+            : 'cursor-default text-text-secondary/55'
+        } ${isToday && !isSelected ? 'text-accent' : ''}`}
       >
-        <span className={`text-sm font-semibold leading-none transition-colors sm:text-base ${isToday ? 'text-accent' : diaryExists ? 'text-text-primary group-hover:text-accent' : ''}`}>{i}</span>
+        <span
+          className={`grid h-9 w-9 place-items-center rounded-full text-sm font-medium leading-none transition-all duration-200 sm:h-10 sm:w-10 sm:text-base ${
+            isSelected
+              ? 'bg-accent text-bg-main shadow-[0_10px_24px_rgba(124,124,240,0.28)]'
+              : 'group-hover:bg-accent/8'
+          }`}
+        >
+          {i}
+        </span>
         {diaryExists && (
-          <span className="h-1.5 w-5 rounded-full bg-accent/70 shadow-[0_0_0_3px_rgba(124,124,240,0.10)] transition-all duration-200 group-hover:w-7 group-hover:bg-accent" />
+          <span className={`absolute bottom-2 h-1.5 w-1.5 rounded-full shadow-[0_0_0_3px_rgba(124,124,240,0.12)] transition-colors duration-200 ${
+            isSelected ? 'bg-bg-main' : 'bg-accent/70 group-hover:bg-accent'
+          }`} />
         )}
       </button>
     );
@@ -87,7 +103,7 @@ export default function CalendarView({ diaries, onDateClick }: CalendarViewProps
 
         <div className="grid grid-cols-7 gap-1.5 text-center sm:gap-2">
           {['日', '一', '二', '三', '四', '五', '六'].map(day => (
-            <div key={day} className="rounded-md bg-bg-main/70 py-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
+            <div key={day} className="py-2 text-[10px] font-bold uppercase tracking-widest text-text-secondary">
               {day}
             </div>
           ))}
