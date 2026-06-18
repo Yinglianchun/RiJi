@@ -119,7 +119,8 @@ class DiaryDatabase:
                       start_date: Optional[str] = None,
                       end_date: Optional[str] = None,
                       emotion_tag: Optional[str] = None,
-                      limit: int = 50) -> List[Dict[str, Any]]:
+                      limit: int = 10,
+                      offset: int = 0) -> List[Dict[str, Any]]:
         """搜索日记"""
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -143,8 +144,8 @@ class DiaryDatabase:
             query += " AND emotion_tags LIKE ?"
             params.append(f"%{emotion_tag}%")
 
-        query += " ORDER BY date DESC LIMIT ?"
-        params.append(limit)
+        query += " ORDER BY date DESC LIMIT ? OFFSET ?"
+        params.extend([limit, offset])
 
         cursor.execute(query, params)
         rows = cursor.fetchall()

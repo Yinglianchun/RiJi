@@ -47,7 +47,8 @@ class DiarySearch(BaseModel):
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     emotion_tag: Optional[str] = None
-    limit: int = 50
+    limit: int = 10
+    offset: int = 0
 
 @app.get("/")
 def root():
@@ -112,7 +113,8 @@ def search_diaries(search: DiarySearch):
         start_date=search.start_date,
         end_date=search.end_date,
         emotion_tag=search.emotion_tag,
-        limit=search.limit
+        limit=search.limit,
+        offset=search.offset
     )
     for diary in diaries:
         diary['comments'] = db.get_comments(diary['id'])

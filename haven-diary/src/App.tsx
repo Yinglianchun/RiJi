@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import ReactQuill from 'react-quill-new';
 import {
@@ -56,6 +56,8 @@ const getShanghaiToday = () =>
     day: '2-digit',
   }).format(new Date());
 
+const PAGE_SIZE = 10;
+
 export default function App() {
   const [view, setView] = useState<ViewType>('memory-lane');
   const [diaries, setDiaries] = useState<Diary[]>([]);
@@ -67,6 +69,9 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [confirmState, setConfirmState] = useState<ConfirmState | null>(null);
+  const [hasMoreDiaries, setHasMoreDiaries] = useState(true);
+  const [isLoadingOlder, setIsLoadingOlder] = useState(false);
+  const loadMoreTriggerRef = useRef<HTMLDivElement | null>(null);
 
   // 加载日记数据
   useEffect(() => {
@@ -90,8 +95,9 @@ export default function App() {
     try {
       setIsLoading(true);
       setError(null);
-      const data = await diaryAPI.searchDiaries({ limit: 50 });
+      const data = await diaryAPI.searchDiaries({ limit: PAGE_SIZE, offset: 0 });
       setDiaries(data);
+      setHasMoreDiaries(data.length === PAGE_SIZE);
     } catch (err) {
       console.error('加载日记失败:', err);
       setError('加载日记失败，请检查后端服务是否启动');
@@ -120,9 +126,41 @@ export default function App() {
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
-  const showToast = (message: string, tone: ToastTone = 'info') => {
+  const showToast = useCallback((message: string, tone: ToastTone = 'info') => {
     setToast({ id: Date.now(), message, tone });
-  };
+  }, []);
+
+  const loadMoreDiaries = useCallback(async () => {
+    if (isLoading || isLoadingOlder || !hasMoreDiaries) return;
+
+    try {
+      setIsLoadingOlder(true);
+      const data = await diaryAPI.searchDiaries({ limit: PAGE_SIZE, offset: diaries.length });
+      setDiaries(prev => [...prev, ...data]);
+      setHasMoreDiaries(data.length === PAGE_SIZE);
+    } catch (err) {
+      console.error('回溯日记失败:', err);
+      showToast('回溯失败，再往下试一次', 'error');
+    } finally {
+      setIsLoadingOlder(false);
+    }
+  }, [diaries.length, hasMoreDiaries, isLoading, isLoadingOlder, showToast]);
+
+  useEffect(() => {
+    if (view !== 'memory-lane' || isLoading || isLoadingOlder || !hasMoreDiaries) return;
+
+    const trigger = loadMoreTriggerRef.current;
+    if (!trigger) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        loadMoreDiaries();
+      }
+    }, { rootMargin: '260px 0px' });
+
+    observer.observe(trigger);
+    return () => observer.disconnect();
+  }, [view, isLoading, isLoadingOlder, hasMoreDiaries, loadMoreDiaries]);
 
   const switchView = (nextView: ViewType) => {
     setView(nextView);
@@ -351,6 +389,21 @@ export default function App() {
                     exit={{ opacity: 0 }}
                   >
                     <MemoryLane diaries={diaries} onDiaryClick={setSelectedDiary} />
+                    {diaries.length > 0 && (
+                      <div
+                        ref={loadMoreTriggerRef}
+                        className="flex min-h-20 items-center justify-center pt-8 text-sm text-text-secondary"
+                      >
+                        <div className="inline-flex items-center gap-2 rounded-full border border-border-subtle px-4 py-2">
+                          <History className="h-4 w-4" />
+                          {isLoadingOlder
+                            ? '正在回溯...'
+                            : hasMoreDiaries
+                              ? '回溯到过去'
+                              : '已经到最早了'}
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                 )}
 

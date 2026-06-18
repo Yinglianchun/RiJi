@@ -35,6 +35,7 @@ interface SearchParams {
   end_date?: string;
   emotion_tag?: string;
   limit?: number;
+  offset?: number;
 }
 
 /**
@@ -51,10 +52,7 @@ class DiaryAPI {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          limit: 50,
-          ...params,
-        }),
+        body: JSON.stringify(params),
       });
 
       if (!response.ok) {
